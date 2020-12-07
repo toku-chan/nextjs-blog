@@ -1,8 +1,11 @@
 import Head from 'next/head'
+
 import Layout, { siteTitle } from '../components/layout'
+import { getSortedPostsData } from '../lib/posts.js'
+
 import utilStyles from '../styles/utils.module.css'
 
-export default function Home() {
+export default function Home({ allPostsData }) {
   return (
     <Layout home>
       <Head>
@@ -15,6 +18,44 @@ export default function Home() {
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p>
       </section>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Blog</h2>
+        <ul className={utilStyles.list}>
+          { allPostsData.map(({id, date, title}) => (
+            <li className={utilStyles.listItem} key={id}>
+              { title }<br />
+              { id }<br />
+              { date }
+            </li>
+          ))}
+        </ul>
+      </section>
     </Layout>
   )
 }
+
+// getStaticPropsはサーバサイドでのみ実行される
+// getStaticProps：開発環境では「毎回リクエストごとに実行」/ 本番環境では「ビルド時にのみ実行」される
+// getStaticPropsはページからのみexportが可能（pages配下のファイルのみ）
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+
+// おまけ
+// リクエスト時にデータを取得してからページを表示する場合は、サーバサイドレンダリングで実装するしかない
+// その時は「getStaticProps」を使用するのではなく、SSRに適した「getServerSideProps」を使用すること
+/**
+ * example
+ * export async function getServerSideProps(context) {
+ *  return {
+ *    props: {
+ *      コンポーネントに渡すためのprops（上記のHomeに渡す内容）
+ *    }
+ *  }
+ * }
+ */
