@@ -13,7 +13,7 @@ export const Layout = ({
 }) => (
   <div className={styles.container}>
     <Head>
-      <link rel="icon" href="/public/favicon.ico" />
+      <link rel="icon" href="/favicon.ico" />
       <meta
         name="description"
         content="Learn how to build a personal website using Next.js"
@@ -38,14 +38,14 @@ export const Layout = ({
             width={144}
             alt=""
           />
-          <h1 classNmae={utilStyles.heading2Xl}>{name}</h1>
+          <h1 className={utilStyles.heading2Xl}>{name}</h1>
         </>
       ) : (
         <>
           <Link href="/">
             <Image
               priority
-              src="/public/images/profile.jpeg"
+              src="/images/profile.jpeg"
               className={utilStyles.borderCircle}
               height={108}
               width={108}
