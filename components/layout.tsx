@@ -1,13 +1,19 @@
+import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 
+type Props = {
+  children: React.ReactNode;
+  home?: boolean;
+};
+
 const name = "tktk";
 export const siteTitle = "Next.js Sample Website";
 
-export const Layout = ({
+export const Layout: React.FC<Props> = ({
   children,
   home
 }) => (

@@ -4,9 +4,15 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 
+type SortParams = {
+  id: string;
+  title: string;
+  date: string
+};
+
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-export function getSortedPostsData() {
+export function getSortedPostsData(): {id: string}[] {
   // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
@@ -26,8 +32,9 @@ export function getSortedPostsData() {
       ...matterResult.data,
     };
   });
+
   // Sort posts by date
-  return allPostsData.sort((a, b) => {
+  return allPostsData.sort((a: SortParams, b: SortParams) => {
     if (a.date < b.date) {
       return 1;
     } else {
@@ -36,7 +43,11 @@ export function getSortedPostsData() {
   });
 };
 
-export function getAllPostIds() {
+export function getAllPostIds(): {
+  params: {
+    id: string
+  }
+}[] {
   const fileNames = fs.readdirSync(postsDirectory);
 
   // Returns an array that looks like this:
@@ -61,7 +72,12 @@ export function getAllPostIds() {
   });
 };
 
-export async function getPostData(id) {
+export async function getPostData(
+  id: string | string[]
+): Promise<{
+  id: string | string[];
+  contentHtml: string;
+}> {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
